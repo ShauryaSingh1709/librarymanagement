@@ -26,21 +26,16 @@ python library.py
 
 The system includes a curated collection of titles for demonstration purposes:
 
-- Attack on Titan
-- Solo Leveling
-- Naruto
-- One Piece
-- Dragon Ball Z
-- Demon Slayer
-- My Hero Academia
-- Death Note
-- Fullmetal Alchemist
-- One Punch Man
-- Tokyo Revengers
-- Jujutsu Kaisen
-- Chainsaw Man
-- Bleach
-- Hunter x Hunter
+- The Great Gatsby
+- To Kill a Mockingbird
+- 1984
+- Pride and Prejudice
+- The Hobbit
+- Harry Potter and the Sorcerer's Stone
+- The Catcher in the Rye
+- The Lord of the Rings
+- Animal Farm
+- Brave New World
 
 ## License
 

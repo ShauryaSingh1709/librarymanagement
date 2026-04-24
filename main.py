@@ -1,4 +1,15 @@
-books = []
+books = [
+    "The Great Gatsby",
+    "To Kill a Mockingbird",
+    "1984",
+    "Pride and Prejudice",
+    "The Hobbit",
+    "Harry Potter and the Sorcerer's Stone",
+    "The Catcher in the Rye",
+    "The Lord of the Rings",
+    "Animal Farm",
+    "Brave New World"
+]
 issued_books = []
 def add_book():
     book = input("Enter the name of the book: ")
