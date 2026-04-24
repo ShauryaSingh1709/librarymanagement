@@ -1,266 +1,140 @@
-from datetime import datetime, timedelta
-
-books = {}
-issued_books = {}
-FINE_RATE_PER_WEEK = 10
-
-famous_books = {
-    "B001": {"title": "The Great Gatsby", "author": "F. Scott Fitzgerald", "quantity": 3},
-    "B002": {"title": "To Kill a Mockingbird", "author": "Harper Lee", "quantity": 4},
-    "B003": {"title": "1984", "author": "George Orwell", "quantity": 5},
-    "B004": {"title": "Pride and Prejudice", "author": "Jane Austen", "quantity": 3},
-    "B005": {"title": "The Hobbit", "author": "J.R.R. Tolkien", "quantity": 2},
-    "B006": {"title": "Harry Potter and the Sorcerer's Stone", "author": "J.K. Rowling", "quantity": 6},
-    "B007": {"title": "The Catcher in the Rye", "author": "J.D. Salinger", "quantity": 3},
-    "B008": {"title": "The Lord of the Rings", "author": "J.R.R. Tolkien", "quantity": 4},
-    "B009": {"title": "Animal Farm", "author": "George Orwell", "quantity": 5},
-    "B010": {"title": "Brave New World", "author": "Aldous Huxley", "quantity": 2},
+books = {
+    "A001": {"title": "Naruto Vol.1", "author": "Masashi Kishimoto", "quantity": 5},
+    "A002": {"title": "One Piece Vol.1", "author": "Eiichiro Oda", "quantity": 4},
+    "A003": {"title": "Attack on Titan Vol.1", "author": "Hajime Isayama", "quantity": 6},
+    "A004": {"title": "Demon Slayer Vol.1", "author": "Koyoharu Gotouge", "quantity": 3},
+    "A005": {"title": "My Hero Academia Vol.1", "author": "Kohei Horikoshi", "quantity": 4},
+    "A006": {"title": "Death Note Vol.1", "author": "Tsugumi Ohba", "quantity": 3},
+    "A007": {"title": "Fullmetal Alchemist Vol.1", "author": "Hiromu Arakawa", "quantity": 2},
+    "A008": {"title": "Jujutsu Kaisen Vol.1", "author": "Gege Akutami", "quantity": 5},
+    "A009": {"title": "Tokyo Ghoul Vol.1", "author": "Sui Ishida", "quantity": 3},
+    "A010": {"title": "Hunter x Hunter Vol.1", "author": "Yoshihiro Togashi", "quantity": 2}
 }
 
-for bid, info in famous_books.items():
-    books[bid] = info
-    books[bid]["total_copies"] = info["quantity"]
-
+issued_books = {}
+FINE_PER_WEEK = 10
 
 def add_book():
-    print("\n" + "="*50)
-    print("ADD NEW BOOK")
-    print("="*50)
-    book_id = input("Enter Book ID: ").strip()
+    print()
+    book_id = input("Enter Book ID: ")
     if book_id in books:
-        print(f"Book ID '{book_id}' already exists!")
+        print("Book ID already exists!")
         return
-    title = input("Enter Book Title: ").strip()
-    author = input("Enter Author Name: ").strip()
-    while True:
-        try:
-            quantity = int(input("Enter Number of Copies: "))
-            if quantity > 0:
-                break
-            print("Quantity must be positive.")
-        except ValueError:
-            print("Invalid input. Enter a number.")
-    books[book_id] = {"title": title, "author": author, "quantity": quantity, "total_copies": quantity}
-    print(f"\n'{title}' by {author} added successfully ({quantity} copies).")
-    input("\nPress Enter to continue...")
-
+    title = input("Enter Book Title: ")
+    author = input("Enter Author: ")
+    qty = int(input("Enter Quantity: "))
+    books[book_id] = {"title": title, "author": author, "quantity": qty}
+    print(f"{title} added!")
 
 def show_books():
-    print("\n" + "="*70)
-    print("AVAILABLE BOOKS IN LIBRARY")
-    print("="*70)
-    if not books:
-        print("No books in the library.")
-    else:
-        print(f"{'ID':<8} {'Title':<35} {'Author':<20} {'Available':<10}")
-        print("-"*75)
-        for book_id, info in books.items():
-            available = info["quantity"]
-            status = "✓" if available > 0 else "✗"
-            print(f"{book_id:<8} {info['title'][:35]:<35} {info['author'][:20]:<20} {available:<10} {status}")
-    input("\nPress Enter to continue...")
-
+    print()
+    print("=== AVAILABLE BOOKS ===")
+    print(f"{'ID':<8}{'Title':<25}{'Author':<20}{'Qty':<6}")
+    print("-" * 60)
+    for book_id, info in books.items():
+        print(f"{book_id:<8}{info['title']:<25}{info['author']:<20}{info['quantity']:<6}")
 
 def search_book():
-    print("\n" + "="*50)
-    print("SEARCH BOOK")
-    print("="*50)
-    keyword = input("Enter title or author keyword: ").strip().lower()
-    results = []
+    print()
+    kw = input("Search title/author: ").lower()
+    found = 0
     for book_id, info in books.items():
-        if keyword in info["title"].lower() or keyword in info["author"].lower():
-            results.append((book_id, info))
-    if not results:
-        print("No books found matching your search.")
-    else:
-        print(f"\nFound {len(results)} book(s):")
-        print(f"{'ID':<8} {'Title':<35} {'Author':<20} {'Available':<10}")
-        print("-"*75)
-        for book_id, info in results:
-            available = info["quantity"]
-            print(f"{book_id:<8} {info['title'][:35]:<35} {info['author'][:20]:<20} {available:<10}")
-    input("\nPress Enter to continue...")
-
+        if kw in info["title"].lower() or kw in info["author"].lower():
+            print(f"{book_id}: {info['title']} by {info['author']} (Qty: {info['quantity']})")
+            found = 1
+    if not found:
+        print("No books found!")
 
 def issue_book():
-    print("\n" + "="*50)
-    print("ISSUE BOOK")
-    print("="*50)
-    book_id = input("Enter Book ID: ").strip()
+    print()
+    book_id = input("Enter Book ID: ")
     if book_id not in books:
-        print("Book not found.")
-        input("\nPress Enter to continue...")
+        print("Book not found!")
         return
     if books[book_id]["quantity"] <= 0:
-        print("All copies are currently issued.")
-        input("\nPress Enter to continue...")
+        print("No copies available!")
         return
-    student_name = input("Enter Student Name: ").strip()
-    while True:
-        duration_days = input("Enter Issue Duration (days, max 30): ")
-        try:
-            duration = int(duration_days)
-            if 1 <= duration <= 30:
-                break
-            print("Duration must be between 1 and 30 days.")
-        except ValueError:
-            print("Invalid input. Enter a number.")
-    issue_date = datetime.now()
-    due_date = issue_date + timedelta(days=duration)
+    name = input("Student Name: ")
+    days = int(input("Days (max 30): "))
+    issue = __import__("datetime").datetime.now()
+    due = issue + __import__("datetime").timedelta(days=days)
     if book_id not in issued_books:
         issued_books[book_id] = []
-    issued_books[book_id].append({"student_name": student_name, "issue_date": issue_date.strftime("%Y-%m-%d %H:%M"), "due_date": due_date.strftime("%Y-%m-%d"), "returned": False})
+    issued_books[book_id].append({"student": name, "issue": issue.strftime("%Y-%m-%d"), "due": due.strftime("%Y-%m-%d"), "returned": False})
     books[book_id]["quantity"] -= 1
-    print(f"\nBook issued successfully!")
-    print(f"Book Title : {books[book_id]['title']}")
-    print(f"Student    : {student_name}")
-    print(f"Issue Date : {issue_date.strftime('%Y-%m-%d %H:%M')}")
-    print(f"Due Date   : {due_date.strftime('%Y-%m-%d')}")
-    print(f"Remaining Copies: {books[book_id]['quantity']}")
-    input("\nPress Enter to continue...")
-
+    print(f"Issued! Due: {due.strftime('%Y-%m-%d')}")
 
 def return_book():
-    print("\n" + "="*50)
-    print("RETURN BOOK")
-    print("="*50)
-    book_id = input("Enter Book ID: ").strip()
-    if book_id not in issued_books or not issued_books[book_id]:
-        print("No issued records found for this book.")
-        input("\nPress Enter to continue...")
-        return
-    student_name = input("Enter Student Name: ").strip()
-    found_record = None
-    for record in issued_books[book_id]:
-        if record["student_name"].lower() == student_name.lower() and not record["returned"]:
-            found_record = record
-            break
-    if not found_record:
-        print(f"No active issue record found for {student_name}.")
-        input("\nPress Enter to continue...")
-        return
-    return_date = datetime.now()
-    due_date = datetime.strptime(found_record["due_date"], "%Y-%m-%d")
-    days_late = (return_date - due_date).days
-    fine = 0
-    if days_late > 0:
-        weeks_late = (days_late + 6) // 7
-        fine = weeks_late * FINE_RATE_PER_WEEK
-    found_record["returned"] = True
-    found_record["return_date"] = return_date.strftime("%Y-%m-%d %H:%M")
-    books[book_id]["quantity"] += 1
-    print("\nReturn processed successfully!")
-    print(f"Book Title  : {books[book_id]['title']}")
-    print(f"Student     : {student_name}")
-    print(f"Issue Date  : {found_record['issue_date']}")
-    print(f"Due Date    : {found_record['due_date']}")
-    print(f"Return Date : {return_date.strftime('%Y-%m-%d %H:%M')}")
-    if days_late > 0:
-        print(f"\nReturned {days_late} day(s) late.")
-        print(f"Weeks overdue: {weeks_late}")
-        print(f"Fine Amount : ${fine}")
-    else:
-        print("\nReturned on time. No fine.")
-    input("\nPress Enter to continue...")
-
-
-def show_issued_books():
-    print("\n" + "="*70)
-    print("ISSUED BOOKS RECORDS")
-    print("="*70)
-    if not issued_books:
-        print("No books have been issued.")
-    else:
-        for book_id, records in issued_books.items():
-            if records:
-                book_title = books.get(book_id, {}).get("title", "Unknown")
-                print(f"\nBook: {book_title} (ID: {book_id})")
-                print(f"{'Student':<20} {'Issue Date':<20} {'Due Date':<12} {'Status':<12}")
-                print("-"*70)
-                for rec in records:
-                    status = "RETURNED" if rec["returned"] else "ACTIVE"
-                    print(f"{rec['student_name'][:20]:<20} {rec['issue_date']:<20} {rec['due_date']:<12} {status:<12}")
-                    if rec["returned"]:
-                        print(f"{'':<20} Returned: {rec.get('return_date', '-')}")
-    input("\nPress Enter to continue...")
-
-
-def calculate_fine():
-    print("\n" + "="*50)
-    print("CHECK FINE")
-    print("="*50)
-    book_id = input("Enter Book ID: ").strip()
-    student_name = input("Enter Student Name: ").strip()
+    print()
+    book_id = input("Enter Book ID: ")
+    name = input("Student Name: ")
     if book_id not in issued_books:
-        print("No issued records for this book.")
-        input("\nPress Enter to continue...")
+        print("No records!")
         return
-    found_active = False
     for rec in issued_books[book_id]:
-        if rec["student_name"].lower() == student_name.lower() and not rec["returned"]:
-            found_active = True
-            due_date = datetime.strptime(rec["due_date"], "%Y-%m-%d")
-            current_date = datetime.now()
-            days_late = (current_date - due_date).days
-            if days_late > 0:
-                weeks_late = (days_late + 6) // 7
-                fine = weeks_late * FINE_RATE_PER_WEEK
-                print(f"\n⚠ OVERDUE BOOK")
-                print(f"Student    : {student_name}")
-                print(f"Book       : {books.get(book_id, {}).get('title', 'Unknown')}")
-                print(f"Due Date   : {rec['due_date']}")
-                print(f"Days Late  : {days_late}")
-                print(f"Weeks Late : {weeks_late}")
-                print(f"Fine Total : ${fine}")
+        if rec["student"] == name and not rec["returned"]:
+            rec["returned"] = True
+            rec["return_date"] = __import__("datetime").datetime.now().strftime("%Y-%m-%d")
+            books[book_id]["quantity"] += 1
+            due = __import__("datetime").datetime.strptime(rec["due"], "%Y-%m-%d")
+            ret = __import__("datetime").datetime.strptime(rec["return_date"], "%Y-%m-%d")
+            late = (ret - due).days
+            if late > 0:
+                weeks = (late + 6) // 7
+                fine = weeks * FINE_PER_WEEK
+                print(f"Late {late} days. Fine: ${fine}")
             else:
-                print(f"\n✓ No fine applicable.")
-                print(f"Due Date : {rec['due_date']}")
-                print(f"Days remaining: {-days_late}")
-            break
-    if not found_active:
-        print("No active issue record found.")
-    input("\nPress Enter to continue...")
+                print("Returned on time!")
+            return
+    print("No active issue found!")
 
+def show_issued():
+    print()
+    print("=== ISSUED BOOKS ===")
+    for book_id, recs in issued_books.items():
+        for r in recs:
+            status = "RETURNED" if r["returned"] else "ACTIVE"
+            title = books.get(book_id, {}).get("title", book_id)
+            print(f"{title} - {r['student']} - {r['issue']} to {r['due']} [{status}]")
 
-def library_menu():
+def check_fine():
+    print()
+    book_id = input("Book ID: ")
+    name = input("Student Name: ")
+    if book_id not in issued_books:
+        print("No records!")
+        return
+    for rec in issued_books[book_id]:
+        if rec["student"] == name and not rec["returned"]:
+            rec["returned"] = True
+            rec["return_date"] = __import__("datetime").datetime.now().strftime("%Y-%m-%d")
+            books[book_id]["quantity"] += 1
+            due = __import__("datetime").datetime.strptime(rec["due"], "%Y-%m-%d")
+            ret = __import__("datetime").datetime.strptime(rec["return_date"], "%Y-%m-%d")
+            late = (ret - due).days
+            if late > 0:
+                weeks = (late + 6) // 7
+                fine = weeks * FINE_PER_WEEK
+                print(f"Days late: {late}. Fine: ${fine}")
+            else:
+                print(f"On time. {-late} days left.")
+            return
+    print("No active record!")
+
+def main():
     while True:
-        print("\n" + "="*60)
-        print("📚 LIBRARY MANAGEMENT SYSTEM")
-        print("="*60)
-        print("Fine Policy: $10 per week (7 days) late return")
-        print("Charged weekly, rounded up (e.g., 1-7 days = $10, 8-14 days = $20)")
-        print("-"*60)
-        print("1.  Add Book")
-        print("2.  Show All Books")
-        print("3.  Search Book")
-        print("4.  Issue Book")
-        print("5.  Return Book")
-        print("6.  View Issued Books")
-        print("7.  Check Fine")
-        print("8.  Exit")
-        print("-"*60)
-        choice = input("Enter your choice (1-8): ").strip()
-        if choice == "1":
-            add_book()
-        elif choice == "2":
-            show_books()
-        elif choice == "3":
-            search_book()
-        elif choice == "4":
-            issue_book()
-        elif choice == "5":
-            return_book()
-        elif choice == "6":
-            show_issued_books()
-        elif choice == "7":
-            calculate_fine()
-        elif choice == "8":
-            print("\nThank you for using Library Management System!")
-            break
-        else:
-            print("Invalid choice. Please enter a number from 1 to 8.")
-            input("\nPress Enter to continue...")
+        print()
+        print("=== ANIME LIBRARY SYSTEM ===")
+        print("1. Add Book  2. Show Books  3. Search  4. Issue  5. Return  6. Issued  7. Fine  8. Exit")
+        ch = input("Choice: ")
+        if ch == "1": add_book()
+        elif ch == "2": show_books()
+        elif ch == "3": search_book()
+        elif ch == "4": issue_book()
+        elif ch == "5": return_book()
+        elif ch == "6": show_issued()
+        elif ch == "7": check_fine()
+        elif ch == "8": print("Bye!"); break
+        else: print("Invalid!")
 
-
-if __name__ == "__main__":
-    library_menu()
+main()

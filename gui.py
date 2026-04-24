@@ -5,26 +5,23 @@ from datetime import datetime, timedelta
 class LibraryGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("Library Management System")
+        self.root.title("Anime Library Management System")
         self.root.geometry("1100x750")
         self.root.configure(bg="#08080c")
-        self.books = {}
+        self.books = {
+            "A001": {"title": "Naruto Vol.1", "author": "Masashi Kishimoto", "quantity": 5, "total_copies": 5},
+            "A002": {"title": "One Piece Vol.1", "author": "Eiichiro Oda", "quantity": 4, "total_copies": 4},
+            "A003": {"title": "Attack on Titan Vol.1", "author": "Hajime Isayama", "quantity": 6, "total_copies": 6},
+            "A004": {"title": "Demon Slayer Vol.1", "author": "Koyoharu Gotouge", "quantity": 3, "total_copies": 3},
+            "A005": {"title": "My Hero Academia Vol.1", "author": "Kohei Horikoshi", "quantity": 4, "total_copies": 4},
+            "A006": {"title": "Death Note Vol.1", "author": "Tsugumi Ohba", "quantity": 3, "total_copies": 3},
+            "A007": {"title": "Fullmetal Alchemist Vol.1", "author": "Hiromu Arakawa", "quantity": 2, "total_copies": 2},
+            "A008": {"title": "Jujutsu Kaisen Vol.1", "author": "Gege Akutami", "quantity": 5, "total_copies": 5},
+            "A009": {"title": "Tokyo Ghoul Vol.1", "author": "Sui Ishida", "quantity": 3, "total_copies": 3},
+            "A010": {"title": "Hunter x Hunter Vol.1", "author": "Yoshihiro Togashi", "quantity": 2, "total_copies": 2},
+        }
         self.issued_books = {}
         self.FINE_RATE_PER_WEEK = 10
-        famous_books = {
-            "B001": {"title": "The Great Gatsby", "author": "F. Scott Fitzgerald", "quantity": 3, "total_copies": 3},
-            "B002": {"title": "To Kill a Mockingbird", "author": "Harper Lee", "quantity": 4, "total_copies": 4},
-            "B003": {"title": "1984", "author": "George Orwell", "quantity": 5, "total_copies": 5},
-            "B004": {"title": "Pride and Prejudice", "author": "Jane Austen", "quantity": 3, "total_copies": 3},
-            "B005": {"title": "The Hobbit", "author": "J.R.R. Tolkien", "quantity": 2, "total_copies": 2},
-            "B006": {"title": "Harry Potter and the Sorcerer's Stone", "author": "J.K. Rowling", "quantity": 6, "total_copies": 6},
-            "B007": {"title": "The Catcher in the Rye", "author": "J.D. Salinger", "quantity": 3, "total_copies": 3},
-            "B008": {"title": "The Lord of the Rings", "author": "J.R.R. Tolkien", "quantity": 4, "total_copies": 4},
-            "B009": {"title": "Animal Farm", "author": "George Orwell", "quantity": 5, "total_copies": 5},
-            "B010": {"title": "Brave New World", "author": "Aldous Huxley", "quantity": 2, "total_copies": 2},
-        }
-        for bid, info in famous_books.items():
-            self.books[bid] = info
         self.style_ui()
         self.create_widgets()
 
@@ -43,7 +40,7 @@ class LibraryGUI:
         logo = tk.Frame(sidebar, bg=self.c["sidebar"])
         logo.pack(pady=20, padx=15, fill="x")
         tk.Label(logo, text="📚", font=("Segoe UI", 24), bg=self.c["sidebar"]).pack()
-        tk.Label(logo, text="Library", font=("Segoe UI", 18, "bold"), bg=self.c["sidebar"], fg=self.c["fg"]).pack()
+        tk.Label(logo, text="Anime Library", font=("Segoe UI", 18, "bold"), bg=self.c["sidebar"], fg=self.c["fg"]).pack()
         tk.Label(logo, text="Management System", font=("Segoe UI", 10), bg=self.c["sidebar"], fg=self.c["fg_mt"]).pack()
         menu_frame = tk.Frame(sidebar, bg=self.c["sidebar"])
         menu_frame.pack(fill="x", padx=10, pady=30)
@@ -154,7 +151,7 @@ class LibraryGUI:
     def show_add_book(self):
         panel = tk.Frame(self.content, bg=self.c["panel"])
         panel.pack(expand=True, fill="both")
-        tk.Label(panel, text="Add a new book to the library", font=("Segoe UI", 12), bg=self.c["panel"], fg=self.c["fg_sec"]).pack(pady=(20, 15))
+        tk.Label(panel, text="Add a new anime/manga to the library", font=("Segoe UI", 12), bg=self.c["panel"], fg=self.c["fg_sec"]).pack(pady=(20, 15))
         fields_frame = tk.Frame(panel, bg=self.c["panel"])
         fields_frame.pack(pady=10)
         tk.Label(fields_frame, text="Book ID:", font=("Segoe UI", 11), bg=self.c["panel"], fg=self.c["fg"]).grid(row=0, column=0, sticky="w", padx=20, pady=8)
@@ -174,7 +171,7 @@ class LibraryGUI:
     def show_search(self):
         panel = tk.Frame(self.content, bg=self.c["panel"])
         panel.pack(expand=True, fill="both")
-        tk.Label(panel, text="Search for books in the library", font=("Segoe UI", 12), bg=self.c["panel"], fg=self.c["fg_sec"]).pack(pady=(20, 15))
+        tk.Label(panel, text="Search anime/manga titles & authors", font=("Segoe UI", 12), bg=self.c["panel"], fg=self.c["fg_sec"]).pack(pady=(20, 15))
         self.search_entry = tk.Entry(panel, font=("Segoe UI", 14), bg=self.c["card"], fg=self.c["fg"], relief="flat", bd=0, insertbackground=self.c["fg"])
         self.search_entry.pack(fill="x", padx=30, pady=(0, 15))
         self.search_entry.bind("<KeyRelease>", lambda e: self.do_search())
