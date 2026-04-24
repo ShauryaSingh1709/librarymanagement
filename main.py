@@ -1,14 +1,7 @@
 books = [
-    "The Great Gatsby",
-    "To Kill a Mockingbird",
-    "1984",
-    "Pride and Prejudice",
-    "The Hobbit",
-    "Harry Potter and the Sorcerer's Stone",
-    "The Catcher in the Rye",
-    "The Lord of the Rings",
-    "Animal Farm",
-    "Brave New World"
+    "Naruto Vol.1",
+    "One Piece Vol.1",
+    "Attack on Titan Vol.1",
 ]
 issued_books = []
 def add_book():
