@@ -1,30 +1,30 @@
-# 📚 Library Management System
+# Library Management System
 
-A modern GUI-based library management system built with Python and Tkinter.
+A graphical user interface (GUI)-based library management system developed with Python and Tkinter, designed for efficient book tracking and management.
 
 ## Features
 
-- **Modern Dark UI** - Sleek dark theme with professional design
-- **Sidebar Navigation** - Easy access to all sections
-- **Available Books** - View and issue books
-- **Issued Books** - View and return books
-- **Add Books** - Add new books with quick options
-- **Search** - Real-time search functionality
-- **Reports** - View library statistics
-- **Anime-themed Data** - Pre-loaded with popular anime titles
+- **Intuitive Dashboard** - Clean and responsive user interface for seamless navigation
+- **Book Management** - Add, view, and manage book inventory
+- **Issue Tracking** - Monitor issued books and manage returns
+- **Search Functionality** - Quick search and filter options for locating books
+- **Statistics Reports** - View library metrics and usage data
+- **Sample Dataset** - Pre-populated with curated book entries for demonstration
 
 ## How to Run
 
 ```bash
-python gui.py
+python library.py
 ```
 
 ## Requirements
 
 - Python 3.x
-- Tkinter (included with Python)
+- Tkinter (included with standard Python installation)
 
-## Pre-loaded Anime Books
+## Sample Dataset
+
+The system includes a curated collection of titles for demonstration purposes:
 
 - Attack on Titan
 - Solo Leveling
